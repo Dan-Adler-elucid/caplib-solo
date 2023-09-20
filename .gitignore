@@ -1,0 +1,8 @@
+build*/
+externals/boost/build*/
+externals/dcmtk/build*/
+externals/ITK/build*/
+externals/ITK/elucid.patch.done
+externals/ITK/Modules/
+externals/VTK/build*/
+externals/VTK/build*/Common/DataModel/vtkPolygon.cxx
