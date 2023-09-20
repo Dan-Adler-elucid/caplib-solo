@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.24 )
+cmake_minimum_required( VERSION 3.22 FATAL_ERROR )
 
 if( COMMAND cmake_policy )
     cmake_policy( SET CMP0048 NEW )
@@ -13,6 +13,8 @@ endif()
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
+
+set( VTK_RENDERING_BACKEND OpenGL2 )
 
 add_subdirectory( caplib )
 add_subdirectory( disp )

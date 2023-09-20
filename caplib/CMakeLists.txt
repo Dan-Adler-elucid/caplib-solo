@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.24 FATAL_ERROR )
+cmake_minimum_required( VERSION 3.22 FATAL_ERROR )
 
 project( caplib VERSION 1.0.0 LANGUAGES C CXX )
 
@@ -45,12 +45,7 @@ if( NOT COMMAND vtk_module_config )
       set(${ns}_LIBRARIES ${${ns}_LIBRARIES} VTK::${_arg})
     endforeach()
   endmacro()
-
-  if(NOT VTK_RENDERING_BACKEND)
-    set(VTK_RENDERING_BACKEND OpenGL2)
-  endif()
 endif()
-
 
 find_package( ITK HINTS ${ITK_DIR} REQUIRED )
 find_package( VTK HINTS ${VTK_DIR} REQUIRED )

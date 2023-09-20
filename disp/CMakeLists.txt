@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.24 )
+cmake_minimum_required( VERSION 3.22 FATAL_ERROR )
 
 if( COMMAND cmake_policy )
   cmake_policy( SET CMP0003 NEW )
@@ -26,12 +26,7 @@ if( NOT COMMAND vtk_module_config )
       set(${ns}_LIBRARIES ${${ns}_LIBRARIES} VTK::${_arg})
     endforeach()
   endmacro()
-
-  if(NOT VTK_RENDERING_BACKEND)
-    set(VTK_RENDERING_BACKEND OpenGL2)
-  endif()
 endif()
-
 
 find_package( ITK HINTS ${ITK_DIR} REQUIRED )
 find_package( VTK HINTS ${VTK_DIR} REQUIRED )

@@ -2,9 +2,9 @@
 
 # Build steps:
 DO_01_checkout_and_patch_externals=false # <-- SET ME
-DO_02_build_vtk=true # <-- SET ME
-DO_03_build_itk=true # <-- SET ME
-DO_04_build_dcmtk=true # <-- SET ME
+DO_02_build_vtk=false # <-- SET ME
+DO_03_build_itk=false # <-- SET ME
+DO_04_build_dcmtk=false # <-- SET ME
 DO_05_build_caplib=true # <-- SET ME
 
 # EVServer source, EVServer build, and caplib-solo source directories
@@ -23,7 +23,7 @@ declare -a CMAKE_BUILD_TYPES=($1 $2) # i.e. (Release Debug)  <-- SET ME
 CAPLIB_LINKAGE=SHARED # i.e. SHARED, STATIC  <-- SET ME
 EVServer_DEPLOY_TYPE=Development # i.e. Development, Production  <-- SET ME
 EVServer_RENDERING_BACKEND=OnScreen # i.e. HardwareOffScreen, SoftwareOffScreen, OnScreen  <-- SET ME
-BUILD_TOOL_OPTIONS="-j 8" # <-- SET ME
+BUILD_TOOL_OPTIONS="-j 4" # <-- SET ME
 
 # External library source directories
 CAPLIB_EXTERNAL_DIR=${CAPLIB_SOLO_SOURCE_DIR}/externals
