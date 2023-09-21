@@ -8,6 +8,9 @@ DO_04_build_dcmtk=false # <-- SET ME
 DO_05_build_evserver=true # <-- SET ME
 DO_06_build_caplib=false # <-- SET ME
 
+# Flag to generate the CMake build for EVServer (as part of step 05)
+GENERATE_EVSERVER_CMAKE=false # <-- SET ME
+
 # EVServer source, EVServer build, and caplib-solo source directories
 EVServer_SOURCE_DIR=/inst/adler/EVServer # <-- SET ME
 EVServer_RELEASE_BUILD_DIR=/inst/adler/EVServer-Release-OnScreen # <-- SET ME
@@ -118,7 +121,8 @@ do
         ./scripts/05_build_evserver.sh \
             ${CMAKE_BUILD_TYPE} \
             ${EVServer_BUILD_DIR} \
-            ${EVServer_SOURCE_DIR}
+            ${EVServer_SOURCE_DIR} \
+            ${GENERATE_EVSERVER_CMAKE}
     fi
 
     if [[ ${DO_06_build_caplib} == true ]]; then
