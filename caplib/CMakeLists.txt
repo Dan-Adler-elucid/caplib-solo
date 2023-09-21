@@ -239,8 +239,8 @@ target_include_directories( caplib PRIVATE
     ${COMMON_LIBS_DIR}/configlib
     ${COMMON_LIBS_DIR}/dicomlib
     ${COMMON_LIBS_DIR}/SceneSerialization
-    ${EVServer_BINARY_DIR}/services/c++/common/libs/caplib/cpp # for caplib_export.h and caplibModule.h
-    ${EVServer_BINARY_DIR}/services/c++/common/libs/SceneSerialization # for sceneserialization_export.h
+    ${EVServer_BUILD_DIR}/services/c++/common/libs/caplib/cpp # for caplib_export.h and caplibModule.h
+    ${EVServer_BUILD_DIR}/services/c++/common/libs/SceneSerialization # for sceneserialization_export.h
     )
 
 # These are 'system' includes in order to ignore compiler warnings:

@@ -5,11 +5,13 @@ DO_01_checkout_and_patch_externals=false # <-- SET ME
 DO_02_build_vtk=false # <-- SET ME
 DO_03_build_itk=false # <-- SET ME
 DO_04_build_dcmtk=false # <-- SET ME
-DO_05_build_caplib=true # <-- SET ME
+DO_05_build_evserver=true # <-- SET ME
+DO_06_build_caplib=false # <-- SET ME
 
 # EVServer source, EVServer build, and caplib-solo source directories
-EVServer_SOURCE_DIR=~/dev/EVServer # <-- SET ME
-EVServer_BINARY_DIR=/inst/EVServer-Release-HwOffS # <-- SET ME
+EVServer_SOURCE_DIR=/inst/adler/EVServer # <-- SET ME
+EVServer_RELEASE_BUILD_DIR=/inst/adler/EVServer-Release-OnScreen # <-- SET ME
+EVServer_DEBUG_BUILD_DIR=/inst/adler/EVServer-Debug-OnScreen # <-- SET ME
 CAPLIB_SOLO_SOURCE_DIR=~/dev/caplib-solo # <-- SET ME
 
 # External library versions:
@@ -66,6 +68,13 @@ do
     BOOST_BUILD_DIR=${BOOST_SOURCE_DIR}/build-${BOOST_VERSION}
     CAPLIB_BUILD_DIR=${CAPLIB_SOLO_SOURCE_DIR}/build-${EVSERVER_SHA}-${CMAKE_BUILD_TYPE}-${EVServer_RENDERING_BACKEND}-${EVServer_DEPLOY_TYPE}-${CAPLIB_LINKAGE}
 
+    EVServer_BUILD_DIR=""
+    if [[ ${CMAKE_BUILD_TYPE} == "Release" ]]; then
+        EVServer_BUILD_DIR=${EVServer_RELEASE_BUILD_DIR}
+    elif [[ ${CMAKE_BUILD_TYPE} == "Debug" ]]; then
+        EVServer_BUILD_DIR=${EVServer_DEBUG_BUILD_DIR}
+    fi
+
     if [[ ${DO_02_build_vtk} == true ]]; then
         echo "--------------------------------------------------"
         echo "(STAGE 02) Build VTK"
@@ -102,11 +111,21 @@ do
             ${BUILD_TOOL_OPTIONS}
     fi
 
-    if [[ ${DO_05_build_caplib} == true ]]; then
+    if [[ ${DO_05_build_evserver} == true ]]; then
         echo "--------------------------------------------------"
-        echo "(STAGE 05) Build caplib"
+        echo "(STAGE 05) Build EVServer"
 
-        ./scripts/05_build_caplib.sh \
+        ./scripts/05_build_evserver.sh \
+            ${CMAKE_BUILD_TYPE} \
+            ${EVServer_BUILD_DIR} \
+            ${EVServer_SOURCE_DIR}
+    fi
+
+    if [[ ${DO_06_build_caplib} == true ]]; then
+        echo "--------------------------------------------------"
+        echo "(STAGE 06) Build caplib"
+
+        ./scripts/06_build_caplib.sh \
             ${CMAKE_BUILD_TYPE} \
             ${CAPLIB_SOLO_SOURCE_DIR} \
             ${CAPLIB_BUILD_DIR} \
@@ -116,7 +135,7 @@ do
             ${DCMTK_LIB_DIR} \
             ${BOOST_BUILD_DIR} \
             ${EVServer_SOURCE_DIR} \
-            ${EVServer_BINARY_DIR} \
+            ${EVServer_BUILD_DIR} \
             ${CAPLIB_LINKAGE} \
             ${BUILD_TOOL_OPTIONS}
     fi
