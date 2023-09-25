@@ -61,10 +61,17 @@ else()
     message( FATAL_ERROR "IVAN library not found. Please set IVAN_DIR." )
 endif()
 
-set( IVAN_LIBRARIES
-    ivanCommon
-    ivanITK
-)
+if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
+    set( IVAN_LIBRARIES
+        ivanCommond
+        ivanITKd
+    )
+elseif( CMAKE_BUILD_TYPE STREQUAL "Release" )
+    set( IVAN_LIBRARIES
+        ivanCommon
+        ivanITK
+    )
+endif()
 
 
 set( COMMON_LIBS_DIR ${EVServer_SOURCE_DIR}/services/c++/common/libs )
