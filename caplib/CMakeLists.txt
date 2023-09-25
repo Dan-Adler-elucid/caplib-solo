@@ -16,6 +16,7 @@ message( "Generated with CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}" )
 set( ITK_DIR ${External_ITK_DIR} )
 set( VTK_DIR ${External_VTK_DIR} )
 set( DCMTK_DIR ${External_DCMTK_DIR} )
+set( IVAN_DIR ${External_IVANTK_DIR} )
 
 # ITKVtkGlue in ITK 4.12.2 doesn't compile with VTK9.0.3 (new module structure). This is a backported
 # patch in ITK4.12.2 to introduce the vtk_module_config which has been removed in VTK9 with a new module
@@ -38,6 +39,7 @@ endif()
 find_package( ITK HINTS ${ITK_DIR} REQUIRED )
 find_package( VTK HINTS ${VTK_DIR} REQUIRED )
 find_package( DCMTK HINTS ${DCMTK_DIR} REQUIRED )
+find_package( IVAN HINTS ${IVAN_DIR} REQUIRED )
 
 if( ITK_FOUND )
     include( ${ITK_USE_FILE} )
@@ -52,6 +54,17 @@ endif()
 if( NOT DCMTK_FOUND )
     message( FATAL_ERROR "DCMTK was not found. Please set DCMTK_DIR." )
 endif()
+
+if( IVAN_FOUND )
+    include( ${IVAN_USE_FILE} )
+else()
+    message( FATAL_ERROR "IVAN library not found. Please set IVAN_DIR." )
+endif()
+
+set( IVAN_LIBRARIES
+    ivanCommon
+    ivanITK
+)
 
 
 set( COMMON_LIBS_DIR ${EVServer_SOURCE_DIR}/services/c++/common/libs )
@@ -223,6 +236,7 @@ target_sources( caplib PRIVATE
 
 target_link_directories( caplib PRIVATE
     ${External_DCMTK_LIB_DIR}
+    ${IVAN_LIBRARY_DIRS}
 )
 
 target_include_directories( caplib PRIVATE
@@ -239,6 +253,7 @@ target_include_directories( caplib SYSTEM PRIVATE
     ${ITK_INCLUDE_DIRS}
     ${VTK_INCLUDE_DIRS}
     ${DCMTK_INCLUDE_DIRS}
+    ${IVAN_INCLUDE_DIRS}
     ${External_BOOST_BUILD_DIR}
     ${GRAPHICS_INCLUDE_DIRS}
 )
@@ -247,6 +262,7 @@ target_link_libraries( caplib PRIVATE
     ${ITK_LIBRARIES}
     ${VTK_LIBRARIES}
     ${DCMTK_LIBRARIES}
+    ${IVAN_LIBRARIES}
 )
 
 target_compile_definitions( caplib PRIVATE

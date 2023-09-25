@@ -5,9 +5,9 @@ DO_01_checkout_and_patch_externals=false # <-- SET ME
 DO_02_build_vtk=false # <-- SET ME
 DO_03_build_itk=false # <-- SET ME
 DO_04_build_dcmtk=false # <-- SET ME
-DO_05_build_ivantk=true # <-- SET ME
+DO_05_build_ivantk=false # <-- SET ME
 DO_06_build_evserver=false # <-- SET ME
-DO_07_build_caplib=false # <-- SET ME
+DO_07_build_caplib=true # <-- SET ME
 
 # Flag to generate the CMake build for EVServer (as part of step 05)
 GENERATE_EVSERVER_CMAKE=false # <-- SET ME
@@ -160,6 +160,7 @@ do
             ${DCMTK_BUILD_DIR} \
             ${DCMTK_LIB_DIR} \
             ${BOOST_BUILD_DIR} \
+            ${IVANTK_BUILD_DIR} \
             ${EVServer_SOURCE_DIR} \
             ${EVServer_BUILD_DIR} \
             ${CAPLIB_LINKAGE} \
