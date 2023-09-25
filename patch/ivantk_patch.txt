@@ -1,0 +1,286 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3b92015..c8a4efb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -53,13 +53,35 @@ OPTION( IVAN_BUILD_SHARED_LIBS "Build ivantk with shared libraries." OFF )
+ #
+ FIND_PACKAGE( VTK )
+ IF ( VTK_FOUND )
+-  INCLUDE ( ${USE_VTK_FILE} )
++  # INCLUDE ( ${USE_VTK_FILE} )
+ ENDIF ()
+ 
+ 
+ #-----------------------------------------------------------------------------
+ # Find and use ITK libraries 
+ #
++  # ITKVtkGlue in ITK 4.12.2 doesn't compile with VTK9.0.3 (new module structure). This is a backported
++  # patch in ITK4.12.2 to introduce the vtk_module_config which has been removed in VTK9 with a new module
++  # structure
++  #if(${ITK_VERSION} STREQUAL "v4.12.2")
++  if(NOT COMMAND vtk_module_config)
++  macro(vtk_module_config ns)
++    foreach(arg ${ARGN})
++      if(${arg} MATCHES "^[Vv][Tt][Kk]")
++        string(REGEX REPLACE "^[Vv][Tt][Kk]" "" _arg ${arg})
++      else()
++        set(_arg ${arg})
++      endif()
++      set(${ns}_LIBRARIES ${${ns}_LIBRARIES} VTK::${_arg})
++    endforeach()
++  endmacro()
++
++  if(NOT VTK_RENDERING_BACKEND)
++    set(VTK_RENDERING_BACKEND OpenGL2)
++  endif()
++endif()
++#endif()
++
+ FIND_PACKAGE( ITK REQUIRED )
+ IF ( ITK_FOUND )
+   IF(USE_ITK_FILE)
+@@ -181,10 +203,10 @@ SUBDIRS(
+   Utilities
+ )
+ 
+-IF( VTK_FOUND )
+-  SUBDIRS(
+-    Visualization
+-  )
+-ENDIF( VTK_FOUND )
++# IF( VTK_FOUND )
++#   SUBDIRS(
++#     Visualization
++#   )
++# ENDIF( VTK_FOUND )
+ 
+ 
+diff --git a/Sources/Modeling/ivanVesselGraph.h b/Sources/Modeling/ivanVesselGraph.h
+index 3c6af86..c158fcd 100644
+--- a/Sources/Modeling/ivanVesselGraph.h
++++ b/Sources/Modeling/ivanVesselGraph.h
+@@ -85,8 +85,8 @@ public:
+   
+   VesselNode::Pointer GetRootNode() 
+     { return m_RootNode; }
+-  VesselNode::ConstPointer GetRootNode() const
+-    { return m_RootNode; }
++  // VesselNode::ConstPointer GetRootNode() const
++  //   { return m_RootNode; }
+   		
+ protected:
+   
+diff --git a/Testing/Detection/ivanDetectionTestingHelper.h b/Testing/Detection/ivanDetectionTestingHelper.h
+index 85b5c77..63f0e67 100644
+--- a/Testing/Detection/ivanDetectionTestingHelper.h
++++ b/Testing/Detection/ivanDetectionTestingHelper.h
+@@ -42,7 +42,7 @@ template <class TImage, class TVesselnessImageFunction>
+ int DenseComputeVesselness( TImage *input, TVesselnessImageFunction *vesselness, 
+   const char *outputFileName, bool rescale = true )
+ {
+-  TImage::Pointer output = TImage::New();
++  typename TImage::Pointer output = TImage::New();
+       
+   output->SetRegions( input->GetLargestPossibleRegion() );
+   output->SetSpacing( input->GetSpacing() );
+@@ -61,7 +61,7 @@ int DenseComputeVesselness( TImage *input, TVesselnessImageFunction *vesselness,
+   oit.GoToBegin();
+ 
+   while( !it.IsAtEnd() )
+-  { 
++  {
+     oit.Set( vesselness->EvaluateAtIndex( it.GetIndex() ) );
+     
+     ++it;
+@@ -71,7 +71,7 @@ int DenseComputeVesselness( TImage *input, TVesselnessImageFunction *vesselness,
+   // Rescale output so we can see the result clearly
+   
+   typedef itk::RescaleIntensityImageFilter<TImage>  RescalerType;
+-  RescalerType::Pointer rescaler = RescalerType::New();
++  typename RescalerType::Pointer rescaler = RescalerType::New();
+   rescaler->SetOutputMinimum( 0.0 );
+   rescaler->SetOutputMaximum( 255.0 );
+   rescaler->SetInput( output );
+@@ -79,7 +79,7 @@ int DenseComputeVesselness( TImage *input, TVesselnessImageFunction *vesselness,
+   // Write result
+ 
+   typedef itk::ImageFileWriter<TImage>  WriterType;
+-  WriterType::Pointer writer = WriterType::New();
++  typename WriterType::Pointer writer = WriterType::New();
+   writer->SetFileName( outputFileName );
+   
+   if( rescale )
+@@ -113,11 +113,11 @@ int SparseComputeVesselness( TImage *input, TVesselnessImageFunction *vesselness
+   typedef itk::Image<PixelType,2>          TestImageType;
+   typedef itk::Image<OutputPixelType,2>    TestOutputImageType;
+   
+-  TestImageType::Pointer output = TestImageType::New();
++  typename TestImageType::Pointer output = TestImageType::New();
+   
+-  TestImageType::RegionType             testRegion;
+-  TestImageType::RegionType::SizeType   testSize;
+-  TestImageType::RegionType::IndexType  testIndex;
++  typename TestImageType::RegionType             testRegion;
++  typename TestImageType::RegionType::SizeType   testSize;
++  typename TestImageType::RegionType::IndexType  testIndex;
+   
+   testSize[0]  = input->GetLargestPossibleRegion().GetSize()[0];
+   testSize[1]  = 1;
+@@ -130,7 +130,7 @@ int SparseComputeVesselness( TImage *input, TVesselnessImageFunction *vesselness
+         
+   output->SetRegions( testRegion );
+   
+-  TestImageType::SpacingType testSpacing;
++  typename TestImageType::SpacingType testSpacing;
+   testSpacing[0] = input->GetSpacing()[0];
+   testSpacing[1] = input->GetSpacing()[1];
+   
+@@ -139,9 +139,9 @@ int SparseComputeVesselness( TImage *input, TVesselnessImageFunction *vesselness
+   output->Allocate();
+   output->FillBuffer( itk::NumericTraits<PixelType>::Zero );
+   
+-  TImage::RegionType             inputRegion;
+-  TImage::RegionType::SizeType   inputSize;
+-  TImage::RegionType::IndexType  inputIndex;
++  typename TImage::RegionType             inputRegion;
++  typename TImage::RegionType::SizeType   inputSize;
++  typename TImage::RegionType::IndexType  inputIndex;
+   
+   inputSize[0] = input->GetRequestedRegion().GetSize()[0];
+   inputSize[1] = 1;
+@@ -175,7 +175,7 @@ int SparseComputeVesselness( TImage *input, TVesselnessImageFunction *vesselness
+   // Rescale output so we can see the result clearly
+   
+   typedef itk::RescaleIntensityImageFilter<TestImageType,TestOutputImageType>  RescalerType;
+-  RescalerType::Pointer rescaler = RescalerType::New();
++  typename RescalerType::Pointer rescaler = RescalerType::New();
+   rescaler->SetOutputMinimum( 0.0 );
+   rescaler->SetOutputMaximum( 255.0 );
+   rescaler->SetInput( output );
+@@ -186,7 +186,7 @@ int SparseComputeVesselness( TImage *input, TVesselnessImageFunction *vesselness
+   {
+     typedef itk::ImageFileWriter<TestOutputImageType>  WriterType;
+     
+-    WriterType::Pointer writer = WriterType::New();
++    typename WriterType::Pointer writer = WriterType::New();
+     writer->SetFileName( outputFileName );
+     writer->SetInput( rescaler->GetOutput() );
+   
+@@ -204,7 +204,7 @@ int SparseComputeVesselness( TImage *input, TVesselnessImageFunction *vesselness
+   {
+     typedef itk::ImageFileWriter<TestImageType>  WriterType;
+     
+-    WriterType::Pointer writer = WriterType::New();
++    typename WriterType::Pointer writer = WriterType::New();
+     writer->SetFileName( outputFileName );
+     writer->SetInput( output );
+   
+diff --git a/Testing/Detection/ivanDiscreteMultiscaleGaussianImageFunctionTest.cxx b/Testing/Detection/ivanDiscreteMultiscaleGaussianImageFunctionTest.cxx
+index cfc80b9..a612f66 100644
+--- a/Testing/Detection/ivanDiscreteMultiscaleGaussianImageFunctionTest.cxx
++++ b/Testing/Detection/ivanDiscreteMultiscaleGaussianImageFunctionTest.cxx
+@@ -172,7 +172,7 @@ int main( int argc, const char *argv[] )
+   // Write result
+ 
+   typedef itk::ImageFileWriter<ImageType>  WriterType;
+-  WriterType::Pointer writer = WriterType::New();
++  typename WriterType::Pointer writer = WriterType::New();
+   writer->SetInput( output );
+   
+   if( argc > 2 )
+diff --git a/Testing/Detection/ivanHessianEigenValuesImageFunctionTest.cxx b/Testing/Detection/ivanHessianEigenValuesImageFunctionTest.cxx
+index 81dd3b3..2dda175 100644
+--- a/Testing/Detection/ivanHessianEigenValuesImageFunctionTest.cxx
++++ b/Testing/Detection/ivanHessianEigenValuesImageFunctionTest.cxx
+@@ -172,7 +172,7 @@ int main( int argc, const char *argv[] )
+   // Create writer
+     
+   typedef itk::ImageFileWriter<OutputImageType>  WriterType;
+-  WriterType::Pointer writer = WriterType::New();
++  typename WriterType::Pointer writer = WriterType::New();
+ 
+   writer->SetInput( caster->GetOutput() );
+   writer->SetFileName( "EigenValue1.mhd" );
+diff --git a/Testing/Detection/ivanMultiscalePolarProfileVesselnessImageFunctionTest.cxx b/Testing/Detection/ivanMultiscalePolarProfileVesselnessImageFunctionTest.cxx
+index ba04823..3972122 100644
+--- a/Testing/Detection/ivanMultiscalePolarProfileVesselnessImageFunctionTest.cxx
++++ b/Testing/Detection/ivanMultiscalePolarProfileVesselnessImageFunctionTest.cxx
+@@ -215,7 +215,7 @@ int main( int argc, const char *argv[] )
+   // Rescale output so we can see the result clearly
+   
+   typedef itk::RescaleIntensityImageFilter<ImageType>  RescalerType;
+-  RescalerType::Pointer rescaler = RescalerType::New();
++  typename RescalerType::Pointer rescaler = RescalerType::New();
+   rescaler->SetOutputMinimum( 0.0 );
+   rescaler->SetOutputMaximum( 255.0 );
+   rescaler->SetInput( output );
+@@ -233,7 +233,7 @@ int main( int argc, const char *argv[] )
+   // Write result
+ 
+   typedef itk::ImageFileWriter<ImageType>  WriterType;
+-  WriterType::Pointer writer = WriterType::New();
++  typename WriterType::Pointer writer = WriterType::New();
+   writer->SetInput( rescaler->GetOutput() );
+   writer->SetFileName( argv[2] );
+ 
+diff --git a/Testing/Detection/ivanOffsetMedialnessImageFunctionTest2.cxx b/Testing/Detection/ivanOffsetMedialnessImageFunctionTest2.cxx
+index c8cfbd4..fa76ca4 100644
+--- a/Testing/Detection/ivanOffsetMedialnessImageFunctionTest2.cxx
++++ b/Testing/Detection/ivanOffsetMedialnessImageFunctionTest2.cxx
+@@ -137,7 +137,7 @@ int main( int argc, const char *argv[] )
+   // Write result
+ 
+   typedef itk::ImageFileWriter<ImageType>  WriterType;
+-  WriterType::Pointer writer = WriterType::New();
++  typename WriterType::Pointer writer = WriterType::New();
+   writer->SetInput( medialnessFilter->GetOutput() );
+   
+   if( argc > 2 )
+diff --git a/Testing/Detection/ivanPolarProfileVesselnessImageFunctionTest.cxx b/Testing/Detection/ivanPolarProfileVesselnessImageFunctionTest.cxx
+index 6fb32f6..06eabdd 100644
+--- a/Testing/Detection/ivanPolarProfileVesselnessImageFunctionTest.cxx
++++ b/Testing/Detection/ivanPolarProfileVesselnessImageFunctionTest.cxx
+@@ -175,7 +175,7 @@ int main( int argc, const char *argv[] )
+   // Rescale output so we can see the result clearly
+   
+   typedef itk::RescaleIntensityImageFilter<ImageType>  RescalerType;
+-  RescalerType::Pointer rescaler = RescalerType::New();
++  typename RescalerType::Pointer rescaler = RescalerType::New();
+   rescaler->SetOutputMinimum( 0.0 );
+   rescaler->SetOutputMaximum( 255.0 );
+   rescaler->SetInput( output );
+@@ -193,7 +193,7 @@ int main( int argc, const char *argv[] )
+   // Write result
+ 
+   typedef itk::ImageFileWriter<ImageType>  WriterType;
+-  WriterType::Pointer writer = WriterType::New();
++  typename WriterType::Pointer writer = WriterType::New();
+   writer->SetInput( rescaler->GetOutput() );
+   writer->SetFileName( argv[2] );
+ 
+diff --git a/Testing/Extraction/ivanOptimizedVesselnessBasedSearchVesselTrackerFilterTest.cxx b/Testing/Extraction/ivanOptimizedVesselnessBasedSearchVesselTrackerFilterTest.cxx
+index 8d3a6cc..cd06561 100644
+--- a/Testing/Extraction/ivanOptimizedVesselnessBasedSearchVesselTrackerFilterTest.cxx
++++ b/Testing/Extraction/ivanOptimizedVesselnessBasedSearchVesselTrackerFilterTest.cxx
+@@ -218,7 +218,7 @@ int main( int argc, const char *argv[] )
+     }
+ 
+     typedef itk::RescaleIntensityImageFilter<RealImageType,RealImageType>  RescalerType;
+-    RescalerType::Pointer rescaler = RescalerType::New();
++    typename RescalerType::Pointer rescaler = RescalerType::New();
+     rescaler->SetInput( multiScaleEnhancementFilter->GetOutput() );
+     rescaler->SetOutputMinimum(0.0);
+     rescaler->SetOutputMaximum(255.0);
+diff --git a/Testing/Extraction/ivanVesselnessRidgeSearchVesselTrackerFilterTest.cxx b/Testing/Extraction/ivanVesselnessRidgeSearchVesselTrackerFilterTest.cxx
+index 8a915e3..8424d95 100644
+--- a/Testing/Extraction/ivanVesselnessRidgeSearchVesselTrackerFilterTest.cxx
++++ b/Testing/Extraction/ivanVesselnessRidgeSearchVesselTrackerFilterTest.cxx
+@@ -219,7 +219,7 @@ int main( int argc, const char *argv[] )
+     }
+ 
+     typedef itk::RescaleIntensityImageFilter<RealImageType,RealImageType>  RescalerType;
+-    RescalerType::Pointer rescaler = RescalerType::New();
++    typename RescalerType::Pointer rescaler = RescalerType::New();
+     rescaler->SetInput( multiScaleEnhancementFilter->GetOutput() );
+     rescaler->SetOutputMinimum(0.0);
+     rescaler->SetOutputMaximum(255.0);

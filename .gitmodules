@@ -10,3 +10,6 @@
 [submodule "externals/ITK"]
 	path = externals/ITK
 	url = https://github.com/InsightSoftwareConsortium/ITK.git
+[submodule "externals/ivantk"]
+	path = externals/ivantk
+	url = https://github.com/imacia/ivantk.git
