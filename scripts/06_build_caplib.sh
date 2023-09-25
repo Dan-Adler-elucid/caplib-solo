@@ -15,6 +15,8 @@ BUILD_TOOL_OPTIONS=${12}
 
 # Note that CMAKE_BUILD_TYPE variable is ignored by IDEs
 
+# set( VTK_RENDERING_BACKEND OpenGL2 )
+
 CMAKE_ARGS=" \
     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE} \
     -DExternal_VTK_DIR:PATH=${VTK_BUILD_DIR} \

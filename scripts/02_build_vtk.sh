@@ -36,10 +36,6 @@ elif [ ${EVServer_RENDERING_BACKEND} == "OnScreen" ]; then
     VTK_DEFAULT_RENDER_WINDOW_OFFSCREEN=OFF
 fi
 
-# Note: CMake ignores the variable 'VTK_RENDERING_BACKEND' if it is specified manually, e.g.
-# -DVTK_RENDERING_BACKEND:STRING=OpenGL2
-# For this reason, it is set in the top-level CMakeLists.txt
-
 CMAKE_ARGS=" \
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
     -DBUILD_SHARED_LIBS:BOOL=ON \
