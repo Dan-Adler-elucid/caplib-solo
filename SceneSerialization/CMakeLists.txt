@@ -32,38 +32,38 @@ SET( SCENE_SERIALIZATION_SOURCES
     vtkXMLVolumePropertyReader.cxx
     vtkXMLVolumePropertyWriter.cxx
     vtkXMLDisplayInterface.cxx
-    )
+)
 
 list( TRANSFORM SCENE_SERIALIZATION_SOURCES PREPEND ${SS_DIR}/XML/ )
 
 add_library( SceneSerialization STATIC
     ${SCENE_SERIALIZATION_SOURCES}
-    )
+)
 
 target_include_directories( SceneSerialization SYSTEM PRIVATE
     ${SS_DIR}
     ${COMMON_LIBS_DIR}/configlib
     ${COMMON_LIBS_DIR}/dicomlib
     ${EVServer_BUILD_DIR}/services/c++/common/libs/SceneSerialization # for sceneserialization_export.h
-    )
+)
 
 target_include_directories( SceneSerialization PRIVATE
     ${VTK_INCLUDE_DIRS}
-    )
+)
 
 include( GenerateExportHeader )
 generate_export_header( SceneSerialization )
 
 target_link_libraries( SceneSerialization PRIVATE
     ${VTK_LIBRARIES}
-    )
+)
 
 target_compile_definitions( caplib PRIVATE
     ${VTK_DEFINITIONS}
-    )
+)
 
 set_target_properties( SceneSerialization PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS ON
-    )
+)

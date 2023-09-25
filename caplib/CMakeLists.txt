@@ -211,7 +211,7 @@ endif()
 
 set( EXTRA_SOURCES
     ${COMMON_LIBS_DIR}/configlib/EVconfig.cxx
-    )
+)
 
 add_library( caplib ${CAPLIB_LINKAGE} )
 
@@ -269,6 +269,6 @@ target_compile_options( caplib PRIVATE
 
 set_target_properties( caplib PROPERTIES
     CXX_STANDARD 14
-     CXX_STANDARD_REQUIRED ON
-     CXX_EXTENSIONS ON
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS ON
 )
