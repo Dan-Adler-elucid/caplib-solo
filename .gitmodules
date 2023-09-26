@@ -1,15 +1,20 @@
 [submodule "externals/VTK"]
 	path = externals/VTK
 	url = https://github.com/Kitware/VTK.git
+	ignore = all
 [submodule "externals/boost"]
 	path = externals/boost
 	url = https://github.com/boostorg/boost.git
+	ignore = all
 [submodule "externals/dcmtk"]
 	path = externals/dcmtk
 	url = https://github.com/DCMTK/dcmtk.git
+	ignore = all
 [submodule "externals/ITK"]
 	path = externals/ITK
 	url = https://github.com/InsightSoftwareConsortium/ITK.git
+	ignore = all
 [submodule "externals/ivantk"]
 	path = externals/ivantk
 	url = https://github.com/imacia/ivantk.git
+	ignore = all
