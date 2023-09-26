@@ -61,15 +61,15 @@ else()
     message( FATAL_ERROR "IVAN library not found. Please set IVAN_DIR." )
 endif()
 
-if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
-    set( IVAN_LIBRARIES
-        ivanCommond
-        ivanITKd
-    )
-elseif( CMAKE_BUILD_TYPE STREQUAL "Release" )
+if( CMAKE_BUILD_TYPE STREQUAL "Release" )
     set( IVAN_LIBRARIES
         ivanCommon
         ivanITK
+    )
+elseif( CMAKE_BUILD_TYPE STREQUAL "Debug" )
+    set( IVAN_LIBRARIES
+        ivanCommond
+        ivanITKd
     )
 endif()
 
@@ -166,6 +166,7 @@ set( CAPLIB_SOURCES
     ebvStenosisLookupTable.cxx
     ebvSystemInformation.cxx
     ebvTimeProbe.cxx
+    ebvVesselAnalysis.cxx
     ebvVesselCenterline.cxx
     ebvVesselGraphToMeshAttributeInterpolator.cxx
     ebvVesselNameAdapter.cxx
@@ -179,6 +180,7 @@ set( CAPLIB_SOURCES
     ebvVesselTraverserStretched.cxx
     ebvViewer.cxx
     ebvViewer2D.cxx
+    ebvViewer2DInteractorCallbacks.cxx
     ebvViewer2DInteractorStyle.cxx
     ebvViewer3D.cxx
     ebvViewer3DInteractorStyle.cxx
