@@ -18,24 +18,6 @@ set( VTK_DIR ${External_VTK_DIR} )
 set( DCMTK_DIR ${External_DCMTK_DIR} )
 set( IVAN_DIR ${External_IVANTK_DIR} )
 
-# ITKVtkGlue in ITK 4.12.2 doesn't compile with VTK9.0.3 (new module structure). This is a backported
-# patch in ITK4.12.2 to introduce the vtk_module_config which has been removed in VTK9 with a new module
-# structure
-
-if( NOT COMMAND vtk_module_config )
-    macro(vtk_module_config ns)
-        foreach(arg ${ARGN})
-            if(${arg} MATCHES "^[Vv][Tt][Kk]")
-                string(REGEX REPLACE "^[Vv][Tt][Kk]" "" _arg ${arg})
-            else()
-                set(_arg ${arg})
-            endif()
-
-            set(${ns}_LIBRARIES ${${ns}_LIBRARIES} VTK::${_arg})
-        endforeach()
-    endmacro()
-endif()
-
 find_package( ITK HINTS ${ITK_DIR} REQUIRED )
 find_package( VTK HINTS ${VTK_DIR} REQUIRED )
 find_package( DCMTK HINTS ${DCMTK_DIR} REQUIRED )
@@ -180,10 +162,10 @@ set( CAPLIB_SOURCES
     ebvVesselTraverserStretched.cxx
     ebvViewer.cxx
     ebvViewer2D.cxx
-    ebvViewer2DInteractorCallbacks.cxx
     ebvViewer2DInteractorStyle.cxx
     ebvViewer3D.cxx
     ebvViewer3DInteractorStyle.cxx
+    ebvViewerInteractorCallbacks.cxx
     ebvViewerChart.cxx
     ebvViewerCPR.cxx
     ebvViewerCPRFFRHRP.cxx

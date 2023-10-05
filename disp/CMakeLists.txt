@@ -10,24 +10,6 @@ set( ITK_DIR ${External_ITK_DIR} )
 set( VTK_DIR ${External_VTK_DIR} )
 set( DCMTK_DIR ${External_DCMTK_DIR} )
 
-# ITKVtkGlue in ITK 4.12.2 doesn't compile with VTK9.0.3 (new module structure). This is a backported
-# patch in ITK4.12.2 to introduce the vtk_module_config which has been removed in VTK9 with a new module
-# structure
-
-if( NOT COMMAND vtk_module_config )
-    macro(vtk_module_config ns)
-        foreach(arg ${ARGN})
-            if(${arg} MATCHES "^[Vv][Tt][Kk]")
-                string(REGEX REPLACE "^[Vv][Tt][Kk]" "" _arg ${arg})
-            else()
-                set(_arg ${arg})
-            endif()
-
-            set(${ns}_LIBRARIES ${${ns}_LIBRARIES} VTK::${_arg})
-        endforeach()
-    endmacro()
-endif()
-
 find_package( ITK HINTS ${ITK_DIR} REQUIRED )
 find_package( VTK HINTS ${VTK_DIR} REQUIRED )
 find_package( DCMTK HINTS ${DCMTK_DIR} REQUIRED )
