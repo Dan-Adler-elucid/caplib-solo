@@ -27,15 +27,22 @@ set( COMMON_LIBS_DIR ${EVServer_SOURCE_DIR}/services/c++/common/libs )
 set( CAPLIB_CPP_DIR ${COMMON_LIBS_DIR}/caplib/cpp )
 set( CPR_EG_DIR ${EVServer_SOURCE_DIR}/services/c++/common/libs/test/CPRExamples )
 
+
+# Test for straightened CPR view
 add_executable( ebvTestCPRStraightened )
-target_sources( ebvTestCPRStraightened PRIVATE ${CPR_EG_DIR} ebvTestCPRStraightened.cxx )
+
+target_sources( ebvTestCPRStraightened PRIVATE
+    ${CPR_EG_DIR}/ebvTestCPRStraightened.cxx
+    )
 
 target_include_directories( ebvTestCPRStraightened SYSTEM PRIVATE
     ${CPR_EG_DIR}
     ${CAPLIB_CPP_DIR}
     ${COMMON_LIBS_DIR}/dicomlib
     ${EVServer_BUILD_DIR}/services/c++/common/libs/caplib/cpp # for caplib_export.h and caplibModule.h
-    ${ITK_INCLUDE_DIRS} ${VTK_INCLUDE_DIRS} )
+    ${ITK_INCLUDE_DIRS}
+    ${VTK_INCLUDE_DIRS}
+    )
 
 target_link_libraries( ebvTestCPRStraightened PRIVATE caplib ${ITK_LIBRARIES} ${VTK_LIBRARIES} )
 target_compile_definitions( ebvTestCPRStraightened PRIVATE ${VTK_DEFINITIONS} )
@@ -43,15 +50,20 @@ target_compile_options( ebvTestCPRStraightened PRIVATE -O3 )
 set_target_properties( ebvTestCPRStraightened PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS ON )
 
 
+# Test for stretched CPR view
 add_executable( ebvTestCPRStretched )
-target_sources( ebvTestCPRStretched PRIVATE ${CPR_EG_DIR} ebvTestCPRStretched.cxx )
+
+target_sources( ebvTestCPRStretched PRIVATE
+    ${CPR_EG_DIR}/ebvTestCPRStretched.cxx
+    )
 
 target_include_directories( ebvTestCPRStretched SYSTEM PRIVATE
     ${CPR_EG_DIR}
     ${CAPLIB_CPP_DIR}
     ${COMMON_LIBS_DIR}/dicomlib
     ${EVServer_BUILD_DIR}/services/c++/common/libs/caplib/cpp # for caplib_export.h and caplibModule.h
-    ${ITK_INCLUDE_DIRS} ${VTK_INCLUDE_DIRS} )
+    ${ITK_INCLUDE_DIRS} ${VTK_INCLUDE_DIRS}
+    )
 
 target_link_libraries( ebvTestCPRStretched PRIVATE caplib ${ITK_LIBRARIES} ${VTK_LIBRARIES} )
 target_compile_definitions( ebvTestCPRStretched PRIVATE ${VTK_DEFINITIONS} )
@@ -60,14 +72,18 @@ set_target_properties( ebvTestCPRStretched PROPERTIES CXX_STANDARD 14 CXX_STANDA
 
 
 add_executable( ebvTestCurvedPlanarReformatStraight )
-target_sources( ebvTestCurvedPlanarReformatStraight PRIVATE ${CPR_EG_DIR} ebvTestCurvedPlanarReformatStraight.cxx )
+
+target_sources( ebvTestCurvedPlanarReformatStraight PRIVATE
+    ${CPR_EG_DIR}/ebvTestCurvedPlanarReformatStraight.cxx
+    )
 
 target_include_directories( ebvTestCurvedPlanarReformatStraight SYSTEM PRIVATE
     ${CPR_EG_DIR}
     ${CAPLIB_CPP_DIR}
     ${COMMON_LIBS_DIR}/dicomlib
     ${EVServer_BUILD_DIR}/services/c++/common/libs/caplib/cpp # for caplib_export.h and caplibModule.h
-    ${ITK_INCLUDE_DIRS} ${VTK_INCLUDE_DIRS} )
+    ${ITK_INCLUDE_DIRS} ${VTK_INCLUDE_DIRS}
+    )
 
 target_link_libraries( ebvTestCurvedPlanarReformatStraight PRIVATE caplib ${ITK_LIBRARIES} ${VTK_LIBRARIES} )
 target_compile_definitions( ebvTestCurvedPlanarReformatStraight PRIVATE ${VTK_DEFINITIONS} )
