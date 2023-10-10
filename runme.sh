@@ -6,11 +6,11 @@ DO_02_build_vtk=false # <-- SET ME
 DO_03_build_itk=false # <-- SET ME
 DO_04_build_dcmtk=false # <-- SET ME
 DO_05_build_ivantk=false # <-- SET ME
-DO_06_build_evserver=false # <-- SET ME
+DO_06_build_evserver=true # <-- SET ME
 DO_07_build_caplib=true # <-- SET ME
 
-# Flag to generate the CMake build for EVServer (as part of step 05)
-GENERATE_EVSERVER_CMAKE=false # <-- SET ME
+# Flag to generate the CMake build for EVServer (as part of step 06)
+GENERATE_EVSERVER_CMAKE=true # <-- SET ME
 
 # EVServer source, EVServer build, and caplib-solo source directories
 EVServer_SOURCE_DIR=/inst/adler/EVServer # <-- SET ME
@@ -30,7 +30,7 @@ declare -a CMAKE_BUILD_TYPES=($1 $2) # i.e. (Release Debug)  <-- SET ME
 CAPLIB_LINKAGE=SHARED # i.e. SHARED, STATIC  <-- SET ME
 EVServer_DEPLOY_TYPE=Development # i.e. Development, Production  <-- SET ME
 EVServer_RENDERING_BACKEND=OnScreen # i.e. HardwareOffScreen, SoftwareOffScreen, OnScreen  <-- SET ME
-BUILD_TOOL_OPTIONS="-j 2" # <-- SET ME
+BUILD_TOOL_OPTIONS="-j 4" # <-- SET ME
 
 # External library source directories
 CAPLIB_EXTERNAL_DIR=${CAPLIB_SOLO_SOURCE_DIR}/externals
@@ -144,7 +144,8 @@ do
             ${CMAKE_BUILD_TYPE} \
             ${EVServer_BUILD_DIR} \
             ${EVServer_SOURCE_DIR} \
-            ${GENERATE_EVSERVER_CMAKE}
+            ${GENERATE_EVSERVER_CMAKE} \
+            ${BUILD_TOOL_OPTIONS}
     fi
 
     if [[ ${DO_07_build_caplib} == true ]]; then
