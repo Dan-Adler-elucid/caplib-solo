@@ -13,10 +13,12 @@ DO_07_build_caplib=true # <-- SET ME
 GENERATE_EVSERVER_CMAKE=true # <-- SET ME
 
 # EVServer source, EVServer build, and caplib-solo source directories
+CAPLIB_SOLO_SOURCE_DIR=~/dev/caplib-solo # <-- SET ME
 EVServer_SOURCE_DIR=/inst/adler/EVServer # <-- SET ME
 EVServer_RELEASE_BUILD_DIR=/inst/adler/EVServer-Release-OnScreen # <-- SET ME
 EVServer_DEBUG_BUILD_DIR=/inst/adler/EVServer-Debug-OnScreen # <-- SET ME
-CAPLIB_SOLO_SOURCE_DIR=~/dev/caplib-solo # <-- SET ME
+EVServer_RELWITHDEBINFO_BUILD_DIR=/inst/adler/EVServer-RelWithDebInfo-OnScreen # <-- SET ME
+EVServer_MINSIZEREL_BUILD_DIR=/inst/adler/EVServer-MinSizeRel-OnScreen # <-- SET ME
 
 # External library versions:
 VTK_VERSION=c8d614697cc9785fa61065edfbc1122553e955a4 # Commit that just precedes v9.1.0.rc1  <-- SET ME
@@ -26,10 +28,10 @@ BOOST_VERSION=boost-1.83.0 # Note: not specified in EVServer build!  <-- SET ME
 IVANTK_VERSION=a9e1cd6ee39986c7504ded80c2ab9b568bafc1f2
 
 # Build flags:
-declare -a CMAKE_BUILD_TYPES=($1 $2) # i.e. (Release Debug)  <-- SET ME
-CAPLIB_LINKAGE=SHARED # i.e. SHARED, STATIC  <-- SET ME
-EVServer_DEPLOY_TYPE=Development # i.e. Development, Production  <-- SET ME
-EVServer_RENDERING_BACKEND=OnScreen # i.e. HardwareOffScreen, SoftwareOffScreen, OnScreen  <-- SET ME
+declare -a CMAKE_BUILD_TYPES=($1 $2 $3 $4) # i.e. any of (Release, Debug, RelWithDebInfo, MinSizeRel)  <-- SET ME
+CAPLIB_LINKAGE=SHARED # i.e. SHARED or STATIC  <-- SET ME
+EVServer_DEPLOY_TYPE=Development # i.e. Development or Production  <-- SET ME
+EVServer_RENDERING_BACKEND=OnScreen # i.e. HardwareOffScreen, SoftwareOffScreen, or OnScreen  <-- SET ME
 BUILD_TOOL_OPTIONS="-j 4" # <-- SET ME
 
 # External library source directories
@@ -45,7 +47,7 @@ EVSERVER_SHA=`eval " ${GET_SHA_CMD}"`
 echo "EVSERVER_SHA = ${EVSERVER_SHA}"
 
 if [ ${#CMAKE_BUILD_TYPES[@]} -eq 0 ]; then
-    CMAKE_BUILD_TYPES=(Release Debug)
+    CMAKE_BUILD_TYPES=(Release Debug) # Build Release and Debug if not specified
 fi
 
 if [[ ${DO_01_checkout_and_patch_externals} == true ]]; then
@@ -85,6 +87,10 @@ do
         EVServer_BUILD_DIR=${EVServer_RELEASE_BUILD_DIR}
     elif [[ ${CMAKE_BUILD_TYPE} == "Debug" ]]; then
         EVServer_BUILD_DIR=${EVServer_DEBUG_BUILD_DIR}
+    elif [[ ${CMAKE_BUILD_TYPE} == "RelWithDebInfo" ]]; then
+        EVServer_BUILD_DIR=${EVServer_RELWITHDEBINFO_BUILD_DIR}
+    elif [[ ${CMAKE_BUILD_TYPE} == "MinSizeRel" ]]; then
+        EVServer_BUILD_DIR=${EVServer_MINSIZEREL_BUILD_DIR}
     fi
 
     if [[ ${DO_02_build_vtk} == true ]]; then
