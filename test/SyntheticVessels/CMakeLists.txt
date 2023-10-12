@@ -4,6 +4,14 @@ if( COMMAND cmake_policy )
     cmake_policy( SET CMP0003 NEW )
 endif( COMMAND cmake_policy )
 
+SET(CMAKE_C_USE_RESPONSE_FILE_FOR_OBJECTS 1)
+SET(CMAKE_CXX_USE_RESPONSE_FILE_FOR_OBJECTS 1)
+
+SET(CMAKE_C_RESPONSE_FILE_LINK_FLAG "@")
+SET(CMAKE_CXX_RESPONSE_FILE_LINK_FLAG "@")
+
+SET(CMAKE_NINJA_FORCE_RESPONSE_FILE 1 CACHE INTERNAL "")
+
 project( SyntheticVessels VERSION 1.0.0 LANGUAGES C CXX )
 
 set( ITK_DIR ${External_ITK_DIR} )
@@ -11,12 +19,19 @@ set( VTK_DIR ${External_VTK_DIR} )
 set( IVAN_DIR ${External_IVANTK_DIR} )
 
 find_package( VTK HINTS ${VTK_DIR} COMPONENTS REQUIRED
+    CommonComputationalGeometry
     CommonCore
     CommonDataModel
+    CommonMath
+    CommonTransforms
     FiltersCore
+    FiltersGeneral
+    FiltersModeling
     FiltersSources
     InteractionStyle
     IOGeometry
+    IOLegacy
+    IOPLY
     IOXML
     RenderingContextOpenGL2
     RenderingCore
@@ -107,5 +122,35 @@ set_target_properties( tubegen PROPERTIES
 
 vtk_module_autoinit(
     TARGETS tubegen
+    MODULES ${VTK_LIBRARIES}
+)
+
+
+add_executable( ExtrudePolyDataAlongLine MACOSX_BUNDLE
+    ${TUBEGEN_DIR}/tube_extrude.cpp
+    /home/danadler/dev/SplineDrivenImageSlicer/Filters/vtkFrenetSerretFrame.cxx
+)
+
+target_link_libraries( ExtrudePolyDataAlongLine PRIVATE
+    ${VTK_LIBRARIES}
+)
+
+vtk_module_autoinit(
+    TARGETS ExtrudePolyDataAlongLine
+    MODULES ${VTK_LIBRARIES}
+)
+
+
+add_executable( FrenetSerretFrame MACOSX_BUNDLE
+    ${TUBEGEN_DIR}/tubegen_fsframe.cpp
+    /home/danadler/dev/SplineDrivenImageSlicer/Filters/vtkFrenetSerretFrame.cxx
+)
+
+target_link_libraries( FrenetSerretFrame PRIVATE
+    ${VTK_LIBRARIES}
+)
+
+vtk_module_autoinit(
+    TARGETS FrenetSerretFrame
     MODULES ${VTK_LIBRARIES}
 )

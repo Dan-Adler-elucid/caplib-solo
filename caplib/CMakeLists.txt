@@ -87,6 +87,7 @@ set( CAPLIB_SOURCES
     ebvCenteringPointPlacer.cxx
     ebvColorDictionary.cxx
     ebvColorMappedVessel3DActor.cxx
+    ebvContourTriangulator.cxx
     ebvCPRFFRHRPActor.cxx
     ebvCPRFFRHRPAttributeGenerator.cxx
     ebvCPRFFRHRPFilter.cxx
@@ -106,11 +107,16 @@ set( CAPLIB_SOURCES
     ebvElucidLogoActor.cxx
     ebvFFRLookupTable.cxx
     ebvFFRScalarBarActor.cxx
+    ebvFlyingEdges2D.cxx
+    ebvFlyingEdges3D.cxx
     ebvHRP2DLookupTable.cxx
     ebvHRPLookupTable.cxx
     ebvHRPScalarBarActor.cxx
+    ebvImageMapToColors.cxx
+    ebvImageMapToWindowLevelColors.cxx
     ebvImageMorphRepresentation.cxx
     ebvImageMorphWidget.cxx
+    ebvImageReslice.cxx
     ebvInteractorStyleSwitcher.cxx
     ebvLesionMarkerActor2D.cxx
     ebvLesionOverlayActor2D.cxx
@@ -212,17 +218,11 @@ else()
     set( PROXY_SOURCES ${CAPLIB_CPP_DIR}/ebvXOpenGLRenderWindowProxy.cxx )
 endif()
 
-
-set( EXTRA_SOURCES
-    ${COMMON_LIBS_DIR}/configlib/EVconfig.cxx
-)
-
 add_library( caplib ${CAPLIB_LINKAGE} )
 
 target_sources( caplib PRIVATE
     ${CAPLIB_SOURCES}
     ${PROXY_SOURCES}
-    ${EXTRA_SOURCES}
 )
 
 target_link_directories( caplib PRIVATE
@@ -250,6 +250,9 @@ target_include_directories( caplib SYSTEM PRIVATE
 )
 
 target_link_libraries( caplib PRIVATE
+    configlib
+    dicomlib
+    SceneSerialization
     ${ITK_LIBRARIES}
     ${VTK_LIBRARIES}
     ${DCMTK_LIBRARIES}

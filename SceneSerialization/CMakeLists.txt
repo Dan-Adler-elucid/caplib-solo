@@ -16,7 +16,7 @@ endif()
 
 
 set( COMMON_LIBS_DIR ${EVServer_SOURCE_DIR}/services/c++/common/libs )
-set( SS_DIR ${COMMON_LIBS_DIR}/SceneSerialization )
+set( SCENE_SERIALIZATION_DIR ${COMMON_LIBS_DIR}/SceneSerialization )
 
 SET( SCENE_SERIALIZATION_SOURCES
     vtkXMLColorTransferFunctionReader.cxx
@@ -34,20 +34,20 @@ SET( SCENE_SERIALIZATION_SOURCES
     vtkXMLDisplayInterface.cxx
 )
 
-list( TRANSFORM SCENE_SERIALIZATION_SOURCES PREPEND ${SS_DIR}/XML/ )
+list( TRANSFORM SCENE_SERIALIZATION_SOURCES PREPEND ${SCENE_SERIALIZATION_DIR}/XML/ )
 
-add_library( SceneSerialization STATIC
+add_library( SceneSerialization ${CAPLIB_LINKAGE}
     ${SCENE_SERIALIZATION_SOURCES}
 )
 
-target_include_directories( SceneSerialization SYSTEM PRIVATE
-    ${SS_DIR}
+target_include_directories( SceneSerialization PRIVATE
+    ${SCENE_SERIALIZATION_DIR}
     ${COMMON_LIBS_DIR}/configlib
     ${COMMON_LIBS_DIR}/dicomlib
     ${EVServer_BUILD_DIR}/services/c++/common/libs/SceneSerialization # for sceneserialization_export.h
 )
 
-target_include_directories( SceneSerialization PRIVATE
+target_include_directories( SceneSerialization SYSTEM PRIVATE
     ${VTK_INCLUDE_DIRS}
 )
 
@@ -55,10 +55,11 @@ include( GenerateExportHeader )
 generate_export_header( SceneSerialization )
 
 target_link_libraries( SceneSerialization PRIVATE
+    configlib
     ${VTK_LIBRARIES}
 )
 
-target_compile_definitions( caplib PRIVATE
+target_compile_definitions( SceneSerialization PRIVATE
     ${VTK_DEFINITIONS}
 )
 

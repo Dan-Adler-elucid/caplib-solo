@@ -57,6 +57,7 @@ CMAKE_ARGS=" \
     -S ${VTK_SOURCE_DIR} \
     -B ${VTK_BUILD_DIR} \
     "
+#     -DVTK_MODULE_ENABLE_VTK_loguru=1 \
 
 echo "CMAKE_ARGS=${CMAKE_ARGS}"
 

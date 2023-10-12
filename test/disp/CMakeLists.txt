@@ -56,14 +56,6 @@ endif()
 target_sources( disp PRIVATE
     ${DISP_CPP_DIR}/disp.cxx
     ${PROXY_SOURCES}
-
-    # ${COMMON_LIBS_DIR}/dicomlib/dicom.cpp
-    ${COMMON_LIBS_DIR}/dicomlib/DICOM_DataDictionary.cpp
-    ${COMMON_LIBS_DIR}/dicomlib/DICOM_DataStructure.cpp
-    ${COMMON_LIBS_DIR}/dicomlib/DICOM_FileFormat.cpp
-    ${COMMON_LIBS_DIR}/dicomlib/DICOM_Helper.cpp
-    ${COMMON_LIBS_DIR}/dicomlib/DICOM_IOD.cpp
-    ${COMMON_LIBS_DIR}/dicomlib/DICOM_VR_Types.cpp
 )
 
 target_link_directories( disp PRIVATE
@@ -88,6 +80,7 @@ target_include_directories( disp SYSTEM PRIVATE
 
 target_link_libraries( disp PRIVATE
     caplib
+    dicomlib
     SceneSerialization
     ${ITK_LIBRARIES}
     ${VTK_LIBRARIES}

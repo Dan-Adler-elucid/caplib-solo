@@ -32,7 +32,7 @@ declare -a CMAKE_BUILD_TYPES=($1 $2 $3 $4) # i.e. any of (Release, Debug, RelWit
 CAPLIB_LINKAGE=SHARED # i.e. SHARED or STATIC  <-- SET ME
 EVServer_DEPLOY_TYPE=Development # i.e. Development or Production  <-- SET ME
 EVServer_RENDERING_BACKEND=OnScreen # i.e. HardwareOffScreen, SoftwareOffScreen, or OnScreen  <-- SET ME
-BUILD_TOOL_OPTIONS="-j 4" # <-- SET ME
+BUILD_TOOL_OPTIONS="-j 2" # <-- SET ME
 
 # External library source directories
 CAPLIB_EXTERNAL_DIR=${CAPLIB_SOLO_SOURCE_DIR}/externals
