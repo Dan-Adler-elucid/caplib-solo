@@ -109,6 +109,7 @@ set( CAPLIB_SOURCES
     ebvFFRScalarBarActor.cxx
     ebvFlyingEdges2D.cxx
     ebvFlyingEdges3D.cxx
+    ebvFrenetSerretRefFrame.cxx
     ebvHRP2DLookupTable.cxx
     ebvHRPLookupTable.cxx
     ebvHRPScalarBarActor.cxx

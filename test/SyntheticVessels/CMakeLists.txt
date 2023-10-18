@@ -47,6 +47,7 @@ endif()
 set( TEST_DIR ${EVServer_SOURCE_DIR}/services/c++/common/libs/test )
 set( TUBEGEN_DIR ${TEST_DIR}/SyntheticVessels )
 set( CAPLIB_DIR ${EVServer_SOURCE_DIR}/services/c++/common/libs/caplib/cpp )
+set( CONFIGLIB_DIR ${EVServer_SOURCE_DIR}/services/c++/common/libs/configlib )
 
 set( TUBEGEN_SOURCES
     tubegen.cpp
@@ -83,17 +84,25 @@ set( TUBEGEN_CAPLIB_SOURCES
 
 list( TRANSFORM TUBEGEN_CAPLIB_SOURCES PREPEND "${CAPLIB_DIR}/" )
 
+set( TUBEGEN_CONFIGLIB_SOURCES
+    EVconfig.cxx
+)
+
+list( TRANSFORM TUBEGEN_CONFIGLIB_SOURCES PREPEND "${CONFIGLIB_DIR}/" )
+
 add_executable( tubegen )
 
 target_sources( tubegen PRIVATE
     ${TUBEGEN_SOURCES}
     ${TUBEGEN_CAPLIB_SOURCES}
+    ${TUBEGEN_CONFIGLIB_SOURCES}
 )
 
 target_include_directories( tubegen PRIVATE
     ${TUBEGEN_DIR}
     ${TUBEGEN_DIR}/curves
     ${CAPLIB_DIR}
+    ${CONFIGLIB_DIR}
     ${TEST_DIR}/CPRExamples
     ${EVServer_BUILD_DIR}/services/c++/common/libs/caplib/cpp # for caplib_export.h
 )
