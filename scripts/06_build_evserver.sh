@@ -10,7 +10,6 @@ pushd ${EVServer_BUILD_DIR} > /dev/null
 
     if [[ ${GENERATE_EVSERVER_CMAKE} == true ]]; then
         cmake \
-            -GNinja \
             -DEVServer_RENDERING_BACKEND=OnScreen \
             -DEVServer_SUPERBUILD=ON \
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \

@@ -12,6 +12,9 @@ DO_07_build_caplib=true # <-- SET ME
 # Flag to generate the CMake build for EVServer (as part of step 06)
 GENERATE_EVSERVER_CMAKE=true # <-- SET ME
 
+# Tag the caplib build directory with the EVServer Git SHA
+USE_EVSERVER_SHA_IN_CAPLIB_BUILD_DIR=false # <-- SET ME
+
 # EVServer source, EVServer build, and caplib-solo source directories
 CAPLIB_SOLO_SOURCE_DIR=~/dev/caplib-solo # <-- SET ME
 EVServer_SOURCE_DIR=/inst/adler/EVServer # <-- SET ME
@@ -80,7 +83,15 @@ do
     DCMTK_LIB_DIR=${DCMTK_BUILD_DIR}/lib
     BOOST_BUILD_DIR=${BOOST_SOURCE_DIR}/build-${BOOST_VERSION}
     IVANTK_BUILD_DIR=${IVANTK_SOURCE_DIR}/build-${IVANTK_VERSION}-${CMAKE_BUILD_TYPE}
-    CAPLIB_BUILD_DIR=${CAPLIB_SOLO_SOURCE_DIR}/build-${EVSERVER_SHA}-${CMAKE_BUILD_TYPE}-${EVServer_RENDERING_BACKEND}-${EVServer_DEPLOY_TYPE}-${CAPLIB_LINKAGE}
+
+    EVSERVER_TAG=""
+    if [[ ${USE_EVSERVER_SHA_IN_CAPLIB_BUILD_DIR} == true ]]; then
+        EVSERVER_TAG=${EVSERVER_SHA}
+    else
+        EVSERVER_TAG="current"
+    fi
+
+    CAPLIB_BUILD_DIR=${CAPLIB_SOLO_SOURCE_DIR}/build-${EVSERVER_TAG}-${CMAKE_BUILD_TYPE}-${EVServer_RENDERING_BACKEND}-${EVServer_DEPLOY_TYPE}-${CAPLIB_LINKAGE}
 
     EVServer_BUILD_DIR=""
     if [[ ${CMAKE_BUILD_TYPE} == "Release" ]]; then
