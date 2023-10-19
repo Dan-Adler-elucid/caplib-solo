@@ -57,7 +57,6 @@ set( TUBEGEN_SOURCES
     cpr_render.cpp
     CprInteractorStyle.cpp
     InteractorStyleSwitcherCallback.cpp
-    vtkFrenetSerretFrame.cxx
     curves/Helix.cpp
     curves/HelixParams.cpp
     curves/Line.cpp
