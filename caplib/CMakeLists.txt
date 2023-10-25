@@ -153,6 +153,7 @@ set( CAPLIB_SOURCES
     ebvSegmentationEditorWidget.cxx
     ebvSmartVolumeMapper.cxx
     ebvStenosisLookupTable.cxx
+#    ebvStretchedCprRefFrame.cxx
     ebvSystemInformation.cxx
     ebvTimeProbe.cxx
     ebvVesselAnalysis.cxx

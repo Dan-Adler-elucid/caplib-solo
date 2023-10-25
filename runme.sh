@@ -6,7 +6,7 @@ DO_02_build_vtk=false # <-- SET ME
 DO_03_build_itk=false # <-- SET ME
 DO_04_build_dcmtk=false # <-- SET ME
 DO_05_build_ivantk=false # <-- SET ME
-DO_06_build_evserver=false # <-- SET ME
+DO_06_build_evserver=true # <-- SET ME
 DO_07_build_caplib=true # <-- SET ME
 
 # Flag to generate the CMake build for EVServer (as part of step 06)
@@ -16,8 +16,9 @@ GENERATE_EVSERVER_CMAKE=true # <-- SET ME
 USE_EVSERVER_SHA_IN_CAPLIB_BUILD_DIR=false # <-- SET ME
 
 # EVServer source, EVServer build, and caplib-solo source directories
+TEMP_SOURCE="-Dan"
 CAPLIB_SOLO_SOURCE_DIR=~/dev/caplib-solo # <-- SET ME
-EVServer_SOURCE_DIR=/inst/adler/EVServer # <-- SET ME
+EVServer_SOURCE_DIR=/inst/adler/EVServer${TEMP_SOURCE} # <-- SET ME
 EVServer_RELEASE_BUILD_DIR=/inst/adler/EVServer-Release-OnScreen # <-- SET ME
 EVServer_DEBUG_BUILD_DIR=/inst/adler/EVServer-Debug-OnScreen # <-- SET ME
 EVServer_RELWITHDEBINFO_BUILD_DIR=/inst/adler/EVServer-RelWithDebInfo-OnScreen # <-- SET ME

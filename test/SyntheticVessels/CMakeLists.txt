@@ -57,10 +57,12 @@ set( TUBEGEN_SOURCES
     cpr_render.cpp
     CprInteractorStyle.cpp
     InteractorStyleSwitcherCallback.cpp
+    curves/CurveHelper.cpp
     curves/Helix.cpp
     curves/HelixParams.cpp
     curves/Line.cpp
     curves/LineParams.cpp
+    curves/PredefinedCurve.cpp
     curves/RandomSpline.cpp
     curves/RandomSplineParams.cpp
 )
@@ -73,6 +75,7 @@ set( TUBEGEN_CAPLIB_SOURCES
     ebvCurvedPlanarReformationFilter.cxx
     ebvFrenetSerretRefFrame.cxx
     ebvPolyDataLSFitter.cxx
+    ebvStretchedCprRefFrame.cxx
     ebvSystemInformation.cxx
     ebvTimeProbe.cxx
     ebvVesselCenterline.cxx
