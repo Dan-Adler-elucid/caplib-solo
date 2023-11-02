@@ -268,14 +268,14 @@ target_compile_definitions( caplib PRIVATE
 
 target_compile_options( caplib PRIVATE
     #   -Werror
-    #   -Wall -Wextra -Wpointer-arith -Winit-self -Wunreachable-code
-    #   -Wno-error=array-bounds
-    #   -Wno-error=empty-body
-    #   -Wno-error=maybe-uninitialized
-    #   -Wno-error=stringop-overflow
-    #   -Wshadow -g -ftrapv
-    #   -Wconversion -Wsign-conversion
-    #   -Wshadow
+       -Wall -Wextra -Wpointer-arith -Winit-self -Wunreachable-code
+#       -Wno-error=array-bounds
+#       -Wno-error=empty-body
+#       -Wno-error=maybe-uninitialized
+#       -Wno-error=stringop-overflow
+       -Wshadow -g -ftrapv
+#       -Wconversion -Wsign-conversion
+       -Wshadow
     -O3
 )
 

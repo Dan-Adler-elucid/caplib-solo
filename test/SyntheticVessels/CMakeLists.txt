@@ -75,7 +75,6 @@ set( TUBEGEN_CAPLIB_SOURCES
     ebvCurvedPlanarReformationFilter.cxx
     ebvFrenetSerretRefFrame.cxx
     ebvPolyDataLSFitter.cxx
-    ebvStretchedCprRefFrame.cxx
     ebvSystemInformation.cxx
     ebvTimeProbe.cxx
     ebvVesselCenterline.cxx
@@ -130,16 +129,16 @@ target_compile_definitions( tubegen PRIVATE
 )
 
 target_compile_options( tubegen PRIVATE
-    -Werror
+#    -Werror
     -Wall -Wextra
     -Wpointer-arith
     -Winit-self
     -Wunreachable-code
-    -Wno-error=array-bounds
-    -Wno-error=empty-body
-    -Wno-error=maybe-uninitialized
-    -Wno-error=stringop-overflow
-    -Wno-sign-compare
+#    -Wno-error=array-bounds
+#    -Wno-error=empty-body
+#    -Wno-error=maybe-uninitialized
+#    -Wno-error=stringop-overflow
+#    -Wno-sign-compare
     -Wshadow
     -g -ftrapv
 #    -Wconversion
