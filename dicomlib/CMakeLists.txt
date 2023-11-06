@@ -28,6 +28,10 @@ target_include_directories( dicomlib PRIVATE
     ${DICOMLIB_DIR}
 )
 
+target_compile_definitions( dicomlib PRIVATE
+  ${EBV_COMPILE_DEFINITIONS}
+)
+
 set_target_properties( dicomlib PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON

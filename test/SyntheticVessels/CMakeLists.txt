@@ -129,7 +129,7 @@ target_compile_definitions( tubegen PRIVATE
 )
 
 target_compile_options( tubegen PRIVATE
-#    -Werror
+    -Werror
     -Wall -Wextra
     -Wpointer-arith
     -Winit-self
@@ -138,12 +138,11 @@ target_compile_options( tubegen PRIVATE
 #    -Wno-error=empty-body
 #    -Wno-error=maybe-uninitialized
 #    -Wno-error=stringop-overflow
-#    -Wno-sign-compare
-    -Wshadow
+    -Wno-sign-compare
+#    -Wshadow
     -g -ftrapv
 #    -Wconversion
 #    -Wsign-conversion
-    -Wshadow
     -O3
 )
 

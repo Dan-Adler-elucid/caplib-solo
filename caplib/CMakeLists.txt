@@ -153,7 +153,6 @@ set( CAPLIB_SOURCES
     ebvSegmentationEditorWidget.cxx
     ebvSmartVolumeMapper.cxx
     ebvStenosisLookupTable.cxx
-#    ebvStretchedCprRefFrame.cxx
     ebvSystemInformation.cxx
     ebvTimeProbe.cxx
     ebvVesselAnalysis.cxx
@@ -181,7 +180,6 @@ set( CAPLIB_SOURCES
     ebvViewerSpatial.cxx
     ebvVolumeMidPointPicker.cxx
     ebvVTK3DWidget.cxx
-    # ev_infer.cpp
 
     EVEventDispatcher.cxx
     string_parsing.cpp
@@ -267,13 +265,14 @@ target_compile_definitions( caplib PRIVATE
 )
 
 target_compile_options( caplib PRIVATE
-    #   -Werror
-       -Wall -Wextra -Wpointer-arith -Winit-self -Wunreachable-code
-#       -Wno-error=array-bounds
-#       -Wno-error=empty-body
-#       -Wno-error=maybe-uninitialized
-#       -Wno-error=stringop-overflow
-       -Wshadow -g -ftrapv
+#       -Werror
+#       -Wall -Wextra -Wpointer-arith -Winit-self -Wunreachable-code
+       -Wno-error=array-bounds
+       -Wno-error=empty-body
+       -Wno-error=maybe-uninitialized
+       -Wno-error=stringop-overflow
+       -Wno-sign-compare
+       -g -ftrapv
 #       -Wconversion -Wsign-conversion
        -Wshadow
     -O3

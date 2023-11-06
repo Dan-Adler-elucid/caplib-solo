@@ -55,16 +55,17 @@ include( GenerateExportHeader )
 generate_export_header( SceneSerialization )
 
 target_link_libraries( SceneSerialization PRIVATE
-    configlib
-    ${VTK_LIBRARIES}
+  configlib
+  ${VTK_LIBRARIES}
 )
 
 target_compile_definitions( SceneSerialization PRIVATE
-    ${VTK_DEFINITIONS}
+  ${EBV_COMPILE_DEFINITIONS}
+  ${VTK_DEFINITIONS}
 )
 
 set_target_properties( SceneSerialization PROPERTIES
-    CXX_STANDARD 14
-    CXX_STANDARD_REQUIRED ON
-    CXX_EXTENSIONS ON
+  CXX_STANDARD 14
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS ON
 )

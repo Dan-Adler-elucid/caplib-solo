@@ -23,6 +23,10 @@ target_include_directories( configlib PRIVATE
     ${CONFIGLIB_DIR}
 )
 
+target_compile_definitions( configlib PRIVATE
+  ${EBV_COMPILE_DEFINITIONS}
+)
+
 set_target_properties( configlib PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
