@@ -1,11 +1,13 @@
 #!/bin/bash
 
 CMAKE_BUILD_TYPE=$1
-VTK_SOURCE_DIR=$2
-VTK_BUILD_DIR=$3
-EVServer_DEPLOY_TYPE=$4
-EVServer_RENDERING_BACKEND=$5
-BUILD_TOOL_OPTIONS=$6
+LINK_SHARED=$2
+CMAKE_BUILD_PARALLEL_LEVEL=$3
+VTK_SOURCE_DIR=$4
+VTK_BUILD_DIR=$5
+EVServer_DEPLOY_TYPE=$6
+EVServer_RENDERING_BACKEND=$7
+BUILD_TOOL_OPTIONS=$8
 
 # In production build, turn off debug leak reporting of VTK objects lingering around after destruction.
 # VTK_DEBUG_LEAKS is sort of like Java Garbage Collection. There is an overhead associated with it in
@@ -38,7 +40,8 @@ fi
 
 CMAKE_ARGS=" \
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-    -DBUILD_SHARED_LIBS:BOOL=ON \
+    -DCMAKE_BUILD_PARALLEL_LEVEL=${CMAKE_BUILD_PARALLEL_LEVEL} \
+    -DBUILD_SHARED_LIBS:BOOL=${LINK_SHARED} \
     -DBUILD_TESTING:BOOL=OFF \
     -DVTK_BUILD_TESTING:BOOL=OFF \
     -DModule_vtkTestingRendering:BOOL=ON \

@@ -15,6 +15,14 @@ GENERATE_EVSERVER_CMAKE=true # <-- SET ME
 # Tag the caplib build directory with the EVServer Git SHA
 USE_EVSERVER_SHA_IN_CAPLIB_BUILD_DIR=false # <-- SET ME
 
+EVSERVER_TAG=""
+if [[ ${USE_EVSERVER_SHA_IN_CAPLIB_BUILD_DIR} == true ]]; then
+    EVSERVER_TAG=${EVSERVER_SHA}
+else
+    # EVSERVER_TAG="dev"
+    EVSERVER_TAG="current"
+fi
+
 # EVServer source, EVServer build, and caplib-solo source directories
 TEMP_SOURCE=""
 CAPLIB_SOLO_SOURCE_DIR=~/dev/caplib-solo # <-- SET ME
@@ -36,7 +44,16 @@ declare -a CMAKE_BUILD_TYPES=($1 $2 $3 $4) # i.e. any of (Release, Debug, RelWit
 CAPLIB_LINKAGE=SHARED # i.e. SHARED or STATIC  <-- SET ME
 EVServer_DEPLOY_TYPE=Development # i.e. Development or Production  <-- SET ME
 EVServer_RENDERING_BACKEND=OnScreen # i.e. HardwareOffScreen, SoftwareOffScreen, or OnScreen  <-- SET ME
-BUILD_TOOL_OPTIONS="-j 2" # <-- SET ME
+BUILD_TOOL_OPTIONS="-j4" # <-- SET ME
+CMAKE_BUILD_PARALLEL_LEVEL="2" # <-- SET ME
+
+# Flag to build external libraries as shared:
+EXTERNAL_LIB_LINK_SHARED=ON
+if [[ "${CAPLIB_LINKAGE}" == "SHARED" ]]; then
+    EXTERNAL_LIB_LINK_SHARED="ON"
+elif [[ "${CAPLIB_LINKAGE}" == "STATIC" ]]; then
+    EXTERNAL_LIB_LINK_SHARED="OFF"
+fi
 
 # External library source directories
 CAPLIB_EXTERNAL_DIR=${CAPLIB_SOLO_SOURCE_DIR}/externals
@@ -51,7 +68,7 @@ EVSERVER_SHA=`eval " ${GET_SHA_CMD}"`
 echo "EVSERVER_SHA = ${EVSERVER_SHA}"
 
 if [ ${#CMAKE_BUILD_TYPES[@]} -eq 0 ]; then
-    CMAKE_BUILD_TYPES=(Release Debug) # Build Release and Debug if not specified
+    CMAKE_BUILD_TYPES=(Release) # Build Release if not specified
 fi
 
 if [[ ${DO_01_checkout_and_patch_externals} == true ]]; then
@@ -78,20 +95,12 @@ fi
 for CMAKE_BUILD_TYPE in ${CMAKE_BUILD_TYPES[@]}
 do
     # Build directories, showing info about the build:
-    VTK_BUILD_DIR=${VTK_SOURCE_DIR}/build-${VTK_VERSION}-${CMAKE_BUILD_TYPE}-${EVServer_RENDERING_BACKEND}-${EVServer_DEPLOY_TYPE}
-    ITK_BUILD_DIR=${ITK_SOURCE_DIR}/build-${ITK_VERSION}-${CMAKE_BUILD_TYPE}
-    DCMTK_BUILD_DIR=${DCMTK_SOURCE_DIR}/build-${DCMTK_VERSION}-${CMAKE_BUILD_TYPE}
-    DCMTK_LIB_DIR=${DCMTK_BUILD_DIR}/lib
-    BOOST_BUILD_DIR=${BOOST_SOURCE_DIR}/build-${BOOST_VERSION}
-    IVANTK_BUILD_DIR=${IVANTK_SOURCE_DIR}/build-${IVANTK_VERSION}-${CMAKE_BUILD_TYPE}
-
-    EVSERVER_TAG=""
-    if [[ ${USE_EVSERVER_SHA_IN_CAPLIB_BUILD_DIR} == true ]]; then
-        EVSERVER_TAG=${EVSERVER_SHA}
-    else
-        EVSERVER_TAG="current"
-    fi
-
+    VTK_BUILD_DIR=${VTK_SOURCE_DIR}/build-${VTK_VERSION}-${CMAKE_BUILD_TYPE}-${CAPLIB_LINKAGE}-${EVServer_RENDERING_BACKEND}-${EVServer_DEPLOY_TYPE}
+    ITK_BUILD_DIR=${ITK_SOURCE_DIR}/build-${ITK_VERSION}-${CMAKE_BUILD_TYPE}-${CAPLIB_LINKAGE}
+    DCMTK_BUILD_DIR=${DCMTK_SOURCE_DIR}/build-${DCMTK_VERSION}-${CMAKE_BUILD_TYPE}-${CAPLIB_LINKAGE}
+    BOOST_BUILD_DIR=${BOOST_SOURCE_DIR}/build-${BOOST_VERSION} # No linkage on Boost, since only headers are used
+    IVANTK_BUILD_DIR=${IVANTK_SOURCE_DIR}/build-${IVANTK_VERSION}-${CMAKE_BUILD_TYPE}-${CAPLIB_LINKAGE}
+    
     CAPLIB_BUILD_DIR=${CAPLIB_SOLO_SOURCE_DIR}/build-${EVSERVER_TAG}-${CMAKE_BUILD_TYPE}-${EVServer_RENDERING_BACKEND}-${EVServer_DEPLOY_TYPE}-${CAPLIB_LINKAGE}
 
     EVServer_BUILD_DIR=""
@@ -111,6 +120,8 @@ do
 
         ./scripts/02_build_vtk.sh \
             ${CMAKE_BUILD_TYPE} \
+            ${EXTERNAL_LIB_LINK_SHARED} \
+            ${CMAKE_BUILD_PARALLEL_LEVEL} \
             ${VTK_SOURCE_DIR} \
             ${VTK_BUILD_DIR} \
             ${EVServer_DEPLOY_TYPE} \
@@ -124,6 +135,8 @@ do
 
         ./scripts/03_build_itk.sh \
             ${CMAKE_BUILD_TYPE} \
+            ${EXTERNAL_LIB_LINK_SHARED} \
+            ${CMAKE_BUILD_PARALLEL_LEVEL} \
             ${ITK_SOURCE_DIR} \
             ${ITK_BUILD_DIR} \
             ${VTK_BUILD_DIR} \
@@ -136,6 +149,8 @@ do
 
         ./scripts/04_build_dcmtk.sh \
             ${CMAKE_BUILD_TYPE} \
+            ${EXTERNAL_LIB_LINK_SHARED} \
+            ${CMAKE_BUILD_PARALLEL_LEVEL} \
             ${DCMTK_SOURCE_DIR} \
             ${DCMTK_BUILD_DIR} \
             ${BUILD_TOOL_OPTIONS}
@@ -147,6 +162,8 @@ do
 
         ./scripts/05_build_ivantk.sh \
             ${CMAKE_BUILD_TYPE} \
+            ${EXTERNAL_LIB_LINK_SHARED} \
+            ${CMAKE_BUILD_PARALLEL_LEVEL} \
             ${IVANTK_SOURCE_DIR} \
             ${IVANTK_BUILD_DIR} \
             ${ITK_BUILD_DIR} \
@@ -160,6 +177,7 @@ do
 
         ./scripts/06_build_evserver.sh \
             ${CMAKE_BUILD_TYPE} \
+            ${CMAKE_BUILD_PARALLEL_LEVEL} \
             ${EVServer_BUILD_DIR} \
             ${EVServer_SOURCE_DIR} \
             ${GENERATE_EVSERVER_CMAKE} \
@@ -170,8 +188,12 @@ do
         echo "--------------------------------------------------"
         echo "(STAGE 07) Build caplib"
 
+        DCMTK_LIB_DIR=${DCMTK_BUILD_DIR}/lib
+
         ./scripts/07_build_caplib.sh \
             ${CMAKE_BUILD_TYPE} \
+            ${CAPLIB_LINKAGE} \
+            ${CMAKE_BUILD_PARALLEL_LEVEL} \
             ${CAPLIB_SOLO_SOURCE_DIR} \
             ${CAPLIB_BUILD_DIR} \
             ${VTK_BUILD_DIR} \
@@ -182,7 +204,6 @@ do
             ${IVANTK_BUILD_DIR} \
             ${EVServer_SOURCE_DIR} \
             ${EVServer_BUILD_DIR} \
-            ${CAPLIB_LINKAGE} \
             ${BUILD_TOOL_OPTIONS}
     fi
 done

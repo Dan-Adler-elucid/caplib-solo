@@ -44,15 +44,9 @@ else()
 endif()
 
 if( CMAKE_BUILD_TYPE STREQUAL "Release" )
-    set( IVAN_LIBRARIES
-        ivanCommon
-        ivanITK
-    )
+    set( IVAN_LIBRARIES ivanCommon ivanITK )
 elseif( CMAKE_BUILD_TYPE STREQUAL "Debug" )
-    set( IVAN_LIBRARIES
-        ivanCommond
-        ivanITKd
-    )
+    set( IVAN_LIBRARIES ivanCommond ivanITKd )
 endif()
 
 
@@ -274,7 +268,7 @@ target_compile_options( caplib PRIVATE
        -Wno-sign-compare
        -g -ftrapv
 #       -Wconversion -Wsign-conversion
-       -Wshadow
+#       -Wshadow
     -O3
 )
 

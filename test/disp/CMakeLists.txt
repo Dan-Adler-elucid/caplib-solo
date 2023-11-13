@@ -9,10 +9,12 @@ project( disp VERSION 1.0.0 LANGUAGES C CXX )
 set( ITK_DIR ${External_ITK_DIR} )
 set( VTK_DIR ${External_VTK_DIR} )
 set( DCMTK_DIR ${External_DCMTK_DIR} )
+set( IVAN_DIR ${External_IVANTK_DIR} )
 
 find_package( ITK HINTS ${ITK_DIR} REQUIRED )
 find_package( VTK HINTS ${VTK_DIR} REQUIRED )
 find_package( DCMTK HINTS ${DCMTK_DIR} REQUIRED )
+find_package( IVAN HINTS ${IVAN_DIR} REQUIRED )
 
 if( ITK_FOUND )
     include( ${ITK_USE_FILE} )
@@ -26,6 +28,18 @@ endif()
 
 if( NOT DCMTK_FOUND )
     message( FATAL_ERROR "DCMTK was not found. Please set DCMTK_DIR." )
+endif()
+
+if( IVAN_FOUND )
+    include( ${IVAN_USE_FILE} )
+else()
+    message( FATAL_ERROR "IVAN library not found. Please set IVAN_DIR." )
+endif()
+
+if( CMAKE_BUILD_TYPE STREQUAL "Release" )
+    set( IVAN_LIBRARIES ivanCommon ivanITK )
+elseif( CMAKE_BUILD_TYPE STREQUAL "Debug" )
+    set( IVAN_LIBRARIES ivanCommond ivanITKd )
 endif()
 
 
@@ -60,6 +74,7 @@ target_sources( disp PRIVATE
 
 target_link_directories( disp PRIVATE
     ${External_DCMTK_LIB_DIR}
+    ${IVAN_LIBRARY_DIRS}
 )
 
 target_include_directories( disp PRIVATE
@@ -75,6 +90,7 @@ target_include_directories( disp SYSTEM PRIVATE
     ${ITK_INCLUDE_DIRS}
     ${VTK_INCLUDE_DIRS}
     ${DCMTK_INCLUDE_DIRS}
+    ${IVAN_INCLUDE_DIRS}
     ${External_BOOST_SOURCE_DIR}
 )
 
@@ -84,6 +100,7 @@ target_link_libraries( disp PRIVATE
     SceneSerialization
     ${ITK_LIBRARIES}
     ${VTK_LIBRARIES}
+    ${IVAN_LIBRARIES}
 )
 
 target_compile_definitions( disp PRIVATE

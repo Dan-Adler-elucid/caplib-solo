@@ -37,8 +37,6 @@ if( NOT DCMTK_FOUND )
     message( FATAL_ERROR "DCMTK was not found. Please set DCMTK_DIR." )
 endif()
 
-include_directories(${DCMTK_INCLUDE_DIRS})
-
 find_package( Qt5 COMPONENTS
     Core
     Network
@@ -70,11 +68,6 @@ set( BACKENDLIB_SOURCES
 )
 
 list( TRANSFORM BACKENDLIB_SOURCES PREPEND ${BACKENDLIB_CPP_DIR}/ )
-
-add_definitions(-fPIC)
-add_definitions("-IDCMTK/oflog/include")
-add_definitions("-IDCMTK/ofstd/include")
-add_definitions("-IDCMTK-build/config/include")
 
 add_library( backendlib ${CAPLIB_LINKAGE} )
 
@@ -128,7 +121,7 @@ target_compile_options( backendlib PRIVATE
   -Wno-sign-compare
   -g -ftrapv
 # -Wconversion -Wsign-conversion
-  -Wshadow
+  # -Wshadow
   -O3
 )
 
