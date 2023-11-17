@@ -39,7 +39,8 @@ endif()
 
 set( COMMON_LIBS_DIR ${EVServer_SOURCE_DIR}/services/c++/common/libs )
 set( CAPLIB_CPP_DIR ${COMMON_LIBS_DIR}/caplib/cpp )
-set( CPR_EG_DIR ${EVServer_SOURCE_DIR}/services/c++/common/libs/test/CPRExamples )
+set( TEST_DIR ${EVServer_SOURCE_DIR}/services/c++/common/libs/test )
+set( CPR_EG_DIR ${TEST_DIR}/CPRExamples )
 
 
 # Test for straightened CPR view
@@ -53,6 +54,7 @@ target_include_directories( ebvTestCPRStraightened SYSTEM PRIVATE
     ${CPR_EG_DIR}
     ${CAPLIB_CPP_DIR}
     ${COMMON_LIBS_DIR}/dicomlib
+    ${TEST_DIR}/ReadWriteITKVTK
     ${EVServer_BUILD_DIR}/services/c++/common/libs/caplib/cpp # for caplib_export.h and caplibModule.h
     ${ITK_INCLUDE_DIRS}
     ${VTK_INCLUDE_DIRS}
@@ -70,15 +72,16 @@ add_executable( ebvTestCPRStretched )
 
 target_sources( ebvTestCPRStretched PRIVATE
     ${CPR_EG_DIR}/ebvTestCPRStretched.cxx
-    )
+)
 
 target_include_directories( ebvTestCPRStretched SYSTEM PRIVATE
     ${CPR_EG_DIR}
     ${CAPLIB_CPP_DIR}
     ${COMMON_LIBS_DIR}/dicomlib
+    ${TEST_DIR}/ReadWriteITKVTK
     ${EVServer_BUILD_DIR}/services/c++/common/libs/caplib/cpp # for caplib_export.h and caplibModule.h
     ${ITK_INCLUDE_DIRS} ${VTK_INCLUDE_DIRS}
-    )
+)
 
 target_link_directories( ebvTestCPRStretched PRIVATE ${External_DCMTK_LIB_DIR} ${IVAN_LIBRARY_DIRS} )
 target_link_libraries( ebvTestCPRStretched PRIVATE caplib ${ITK_LIBRARIES} ${VTK_LIBRARIES} ${IVAN_LIBRARIES} )
@@ -91,15 +94,16 @@ add_executable( ebvTestCurvedPlanarReformatStraight )
 
 target_sources( ebvTestCurvedPlanarReformatStraight PRIVATE
     ${CPR_EG_DIR}/ebvTestCurvedPlanarReformatStraight.cxx
-    )
+)
 
 target_include_directories( ebvTestCurvedPlanarReformatStraight SYSTEM PRIVATE
     ${CPR_EG_DIR}
     ${CAPLIB_CPP_DIR}
     ${COMMON_LIBS_DIR}/dicomlib
+    ${TEST_DIR}/ReadWriteITKVTK
     ${EVServer_BUILD_DIR}/services/c++/common/libs/caplib/cpp # for caplib_export.h and caplibModule.h
     ${ITK_INCLUDE_DIRS} ${VTK_INCLUDE_DIRS}
-    )
+)
 
 target_link_directories( ebvTestCurvedPlanarReformatStraight PRIVATE ${External_DCMTK_LIB_DIR} ${IVAN_LIBRARY_DIRS} )
 target_link_libraries( ebvTestCurvedPlanarReformatStraight PRIVATE caplib ${ITK_LIBRARIES} ${VTK_LIBRARIES} ${IVAN_LIBRARIES} )
