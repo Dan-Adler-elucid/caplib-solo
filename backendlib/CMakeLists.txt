@@ -50,6 +50,7 @@ set( CAPLIB_CPP_DIR ${COMMON_LIBS_DIR}/caplib/cpp )
 
 set( BACKENDLIB_SOURCES
   EVCap.cpp
+  # EVImageSeries.cpp
   EVLinkedViewers.cpp
   EVTargetDef.cpp
   EVTargetDefine.cpp

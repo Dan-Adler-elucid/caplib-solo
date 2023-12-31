@@ -49,7 +49,6 @@ elseif( CMAKE_BUILD_TYPE STREQUAL "Debug" )
     set( IVAN_LIBRARIES ivanCommond ivanITKd )
 endif()
 
-
 set( COMMON_LIBS_DIR ${EVServer_SOURCE_DIR}/services/c++/common/libs )
 set( CAPLIB_CPP_DIR ${COMMON_LIBS_DIR}/caplib/cpp )
 
@@ -66,15 +65,20 @@ set( CAPLIB_SOURCES
     ebiProgressToDispatchCommand.cxx
     ebiVesselCrossSection.cxx
     ebiVesselLesion.cxx
+    ebiVesselPipeline.cxx
     ebiVesselSegment.cxx
     ebiVesselTarget.cxx
     ebiVesselTargetPipeline.cxx
 
+    ebDicomSeriesHelper.cxx
+    ebDicomSeriesHelperDetails.cxx
+    ebDicomSeriesHelperStatus.cxx
     ebLog.cxx
 
     ebvAbstractAttributeLookupTable.cxx
     ebvAortaSurfaceActor.cxx
     ebvAxisActor2D.cxx
+    ebvBoxHelpers.cxx
     ebvCalloutActor2D.cxx
     ebvCaptionRepresentation.cxx
     ebvCaptionWidget.cxx
@@ -103,7 +107,7 @@ set( CAPLIB_SOURCES
     ebvFFRScalarBarActor.cxx
     ebvFlyingEdges2D.cxx
     ebvFlyingEdges3D.cxx
-    ebvFrenetSerretRefFrame.cxx
+    # ebvFrenetSerretRefFrame.cxx
     ebvHRP2DLookupTable.cxx
     ebvHRPLookupTable.cxx
     ebvHRPScalarBarActor.cxx
@@ -130,7 +134,9 @@ set( CAPLIB_SOURCES
     ebvLinkedViewersVisualObject.cxx
     ebvLumenSurfaceModelGenerator.cxx
     ebvMouse.cxx
+    # ebvObliqueViewRefFrame.cxx
     ebvOrientationCubeWidget.cxx
+    ebvPanLimiter.cxx
     ebvPointHandleRepresentation3D.cxx
     ebvPointHandleRepresentation3D.h
     ebvPolyDataLSFitter.cxx
@@ -226,6 +232,7 @@ target_link_directories( caplib PRIVATE
 
 target_include_directories( caplib PRIVATE
     ${CAPLIB_CPP_DIR}
+    ${COMMON_LIBS_DIR}/commonlib
     ${COMMON_LIBS_DIR}/configlib
     ${COMMON_LIBS_DIR}/dicomlib
     ${COMMON_LIBS_DIR}/SceneSerialization
@@ -244,6 +251,7 @@ target_include_directories( caplib SYSTEM PRIVATE
 )
 
 target_link_libraries( caplib PRIVATE
+    commonlib
     configlib
     dicomlib
     SceneSerialization
@@ -254,6 +262,8 @@ target_link_libraries( caplib PRIVATE
 )
 
 target_compile_definitions( caplib PRIVATE
+    ENABLE_PLAQUE_TEXTURING=0
+    ENABLE_STENOSIS_TEXTURING=0
     ${EBV_COMPILE_DEFINITIONS}
     ${VTK_DEFINITIONS}
 )

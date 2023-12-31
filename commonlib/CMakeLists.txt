@@ -4,7 +4,11 @@ if( COMMAND cmake_policy )
   cmake_policy( SET CMP0003 NEW )
 endif( COMMAND cmake_policy )
 
-project( commonlib VERSION 1.0.0 LANGUAGES CXX )
+project( commonlib VERSION 1.0.0 LANGUAGES CXX C )
+
+# Flags needed for uuid_v4.
+# Flags determined by running ./instrin.sh _mm256_extract_epi32
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx -mavx512f" )
 
 #set( CMAKE_CXX_FLAGS "-lcrypto" )
 
@@ -41,6 +45,8 @@ SET( COMMONLIB_SOURCES
   rsa_crypto.cpp
   crypto_utils.cpp
   gpuDeviceQuery.cpp
+  memMonitor.cpp
+  condorJobSubmitter.cpp
 )
 
 list( TRANSFORM COMMONLIB_SOURCES PREPEND ${COMMONLIB_DIR}/ )
@@ -62,11 +68,13 @@ target_link_directories( commonlib PRIVATE
 
 target_include_directories( commonlib PRIVATE
   ${COMMONLIB_DIR}
+  ${EVServer_BUILD_DIR}/services/c++/common/libs/SceneSerialization # for sceneserialization_export.h
 )
 
 # These are 'system' includes in order to ignore compiler warnings:
 target_include_directories( commonlib SYSTEM PRIVATE
   ${DCMTK_INCLUDE_DIRS}
+  ${External_UUID_V4_SOURCE_DIR}
 )
 
 target_link_libraries( commonlib PRIVATE

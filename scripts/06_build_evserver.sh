@@ -7,6 +7,7 @@ EVServer_SOURCE_DIR=$4
 GENERATE_EVSERVER_CMAKE=$5
 BUILD_TOOL_OPTIONS=$6
 
+mkdir -p ${EVServer_BUILD_DIR}
 pushd ${EVServer_BUILD_DIR} > /dev/null
 
     if [[ ${GENERATE_EVSERVER_CMAKE} == true ]]; then

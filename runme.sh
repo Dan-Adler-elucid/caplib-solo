@@ -6,8 +6,8 @@ DO_02_build_vtk=false # <-- SET ME
 DO_03_build_itk=false # <-- SET ME
 DO_04_build_dcmtk=false # <-- SET ME
 DO_05_build_ivantk=false # <-- SET ME
-DO_06_build_evserver=false # <-- SET ME
-DO_07_build_caplib=true # <-- SET ME
+DO_06_build_evserver=true # <-- SET ME
+DO_07_build_caplib=false # <-- SET ME
 
 # Flag to generate the CMake build for EVServer (as part of step 06)
 GENERATE_EVSERVER_CMAKE=true # <-- SET ME
@@ -19,7 +19,7 @@ EVSERVER_TAG=""
 if [[ ${USE_EVSERVER_SHA_IN_CAPLIB_BUILD_DIR} == true ]]; then
     EVSERVER_TAG=${EVSERVER_SHA}
 else
-    # EVSERVER_TAG="dev"
+    #EVSERVER_TAG="dev"
     EVSERVER_TAG="current"
 fi
 
@@ -45,7 +45,7 @@ CAPLIB_LINKAGE=SHARED # i.e. SHARED or STATIC  <-- SET ME
 EVServer_DEPLOY_TYPE=Development # i.e. Development or Production  <-- SET ME
 EVServer_RENDERING_BACKEND=OnScreen # i.e. HardwareOffScreen, SoftwareOffScreen, or OnScreen  <-- SET ME
 BUILD_TOOL_OPTIONS="-j4" # <-- SET ME
-CMAKE_BUILD_PARALLEL_LEVEL="2" # <-- SET ME
+CMAKE_BUILD_PARALLEL_LEVEL="4" # <-- SET ME
 
 # Flag to build external libraries as shared:
 EXTERNAL_LIB_LINK_SHARED=ON
@@ -62,6 +62,7 @@ DCMTK_SOURCE_DIR=${CAPLIB_EXTERNAL_DIR}/dcmtk
 IVANTK_SOURCE_DIR=${CAPLIB_EXTERNAL_DIR}/ivantk
 ITK_SOURCE_DIR=${CAPLIB_EXTERNAL_DIR}/ITK
 VTK_SOURCE_DIR=${CAPLIB_EXTERNAL_DIR}/VTK
+UUID_V4_SOURCE_DIR=${CAPLIB_EXTERNAL_DIR}/uuid_v4
 
 GET_SHA_CMD="pushd ${EVServer_SOURCE_DIR} > /dev/null; git rev-parse --short HEAD; popd > /dev/null"
 EVSERVER_SHA=`eval " ${GET_SHA_CMD}"`
@@ -202,6 +203,7 @@ do
             ${DCMTK_LIB_DIR} \
             ${BOOST_BUILD_DIR} \
             ${IVANTK_BUILD_DIR} \
+            ${UUID_V4_SOURCE_DIR} \
             ${EVServer_SOURCE_DIR} \
             ${EVServer_BUILD_DIR} \
             ${BUILD_TOOL_OPTIONS}
