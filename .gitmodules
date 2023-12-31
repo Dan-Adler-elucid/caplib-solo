@@ -18,3 +18,6 @@
 	path = externals/ivantk
 	url = https://github.com/imacia/ivantk.git
 	ignore = all
+[submodule "externals/uuid_v4"]
+	path = externals/uuid_v4
+	url = https://github.com/crashoz/uuid_v4.git
